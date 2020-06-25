@@ -8,9 +8,7 @@ import (
 	"os"
 )
 
-var (
-	IncomingWebhookURL string = os.Getenv("SLACK_INCOMING_WEBHOOK_URL")
-)
+var incomingWebhookURL = os.Getenv("SLACK_INCOMING_WEBHOOK_URL")
 
 type SlackMessage struct {
 	Text string `json:"text"`
@@ -22,7 +20,7 @@ func (sm *SlackMessage) post() error {
 		return fmt.Errorf("marshal failed: %s, input: %s", err, sm)
 	}
 
-	req, err := http.NewRequest(http.MethodPost, IncomingWebhookURL, bytes.NewReader(raw))
+	req, err := http.NewRequest(http.MethodPost, incomingWebhookURL, bytes.NewReader(raw))
 	if err != nil {
 		return fmt.Errorf("failed new request: %s", err)
 	}
