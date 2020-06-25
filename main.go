@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -9,8 +9,8 @@ import (
 )
 
 func handler(event events.CloudWatchEvent) {
-	log.Printf("event: %s", event)
-	log.Printf("env.SLACK_INCOMING_WEBHOOK_URL: %s", os.Getenv("SLACK_INCOMING_WEBHOOK_URL"))
+	fmt.Printf("event: %s", event)
+	fmt.Printf("env.SLACK_INCOMING_WEBHOOK_URL: %s", os.Getenv("SLACK_INCOMING_WEBHOOK_URL"))
 }
 
 func main() {
