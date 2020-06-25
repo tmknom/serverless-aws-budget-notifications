@@ -1,4 +1,4 @@
-service: serverless-aws-budget-notifications
+service: serverless-budget-notifications
 
 frameworkVersion: '>=1.28.0 <2.0.0'
 
