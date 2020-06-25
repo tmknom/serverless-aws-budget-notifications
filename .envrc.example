@@ -1,2 +1,2 @@
 export SLACK_INCOMING_WEBHOOK_URL=xxxxxxxx
-export BUDGET_NAME=xxxxxxxx
+export AWS_BUDGET_NAME=xxxxxxxx

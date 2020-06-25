@@ -1,22 +1,22 @@
 package main
 
 import (
-	"fmt"
+	"os"
 
-	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/slack-go/slack"
 )
 
-func handler(event events.CloudWatchEvent) error {
-	fmt.Printf("event: %s", event)
-	budget, err := describeBudget()
+var incomingWebhookURL = os.Getenv("INCOMING_WEBHOOK_URL")
+
+func handler() error {
+	message, err := createBudgetMessage()
 	if err != nil {
 		return err
 	}
 
-	text := fmt.Sprintf("Actual: %s USD, Forecasted: %s USD", budget.Actual, budget.Forecasted)
-	sm := &SlackMessage{Text: text}
-	return sm.post()
+	webhookMessage := &slack.WebhookMessage{Text: message}
+	return slack.PostWebhook(incomingWebhookURL, webhookMessage)
 }
 
 func main() {
