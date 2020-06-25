@@ -25,3 +25,5 @@ functions:
     environment:
       SLACK_INCOMING_WEBHOOK_URL: ${env:SLACK_INCOMING_WEBHOOK_URL}
       BUDGET_NAME: ${env:BUDGET_NAME}
+    events:
+      - schedule: cron(30 9 * * ? *)
