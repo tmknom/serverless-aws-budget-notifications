@@ -11,29 +11,24 @@ import (
 
 var budgetName = os.Getenv("BUDGET_NAME")
 
-type Budget struct {
-	Actual     string
-	Forecasted string
-}
-
-func describeBudget() (*Budget, error) {
+func createBudgetMessage() (string, error) {
 	sess := session.Must(session.NewSession())
 	callerIdentity, err := sts.New(sess).GetCallerIdentity(nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed GetCallerIdentity: %s", err)
+		return "", fmt.Errorf("failed GetCallerIdentity: %s", err)
 	}
+	accountId := callerIdentity.Account
 
 	input := &budgets.DescribeBudgetInput{
-		AccountId:  callerIdentity.Account,
+		AccountId:  accountId,
 		BudgetName: &budgetName,
 	}
 	output, err := budgets.New(sess).DescribeBudget(input)
 	if err != nil {
-		return nil, fmt.Errorf("failed DescribeBudget: %s, input: %s", err, input)
+		return "", fmt.Errorf("failed DescribeBudget: %s", err)
 	}
 
-	return &Budget{
-		Actual:     *output.Budget.CalculatedSpend.ActualSpend.Amount,
-		Forecasted: *output.Budget.CalculatedSpend.ForecastedSpend.Amount,
-	}, nil
+	spend := *output.Budget.CalculatedSpend
+	return fmt.Sprintf("Actual: %s USD, Forecasted %s USD",
+		*spend.ActualSpend.Amount, *spend.ForecastedSpend.Amount), nil
 }
